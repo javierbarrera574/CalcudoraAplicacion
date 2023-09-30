@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CalcudoraAplicacion.MainPage">
+    <StackLayout
+         HorizontalOptions="Center"
+        VerticalOptions="Center"
+           >
+        <!-- wendry koralis 2019-7914 -->
+
+        <Label Text="Estoooo es una calculadora!" 
+                HorizontalOptions="Center"
+                FontAttributes="Bold"
+                FontSize="25"
+                TextColor="#56403C"   />
+
+        <Label TextColor="Blue" Text="------------------"  x:Name="lblResultado"
+                   HorizontalOptions="Center"
+                   FontFamily="italic"
+                   FontSize="20"/>
+        <Entry Placeholder="Ingresa el primer numero" Keyboard="Numeric" x:Name="txtNumero1" />
+        <Entry Placeholder="Ingresa el segundo numero" Keyboard="Numeric" x:Name="txtNumero2"/>
+        <Label Text="Seleccionar una operacion"  />
+        <Picker x:Name="OpcionOperacion" />
+
+        <Button Text="Calcular" x:Name="calcular" 
+                    BackgroundColor="#02C0E7"/>
+
+
+    </StackLayout>
+
+</ContentPage>
