@@ -9,7 +9,7 @@ namespace CalcudoraAplicacion
 
         int ResultadoResto;
 
-        //private readonly Operacion _operacion;
+        private readonly Operacion _operacion;
 
         #region
         //public MainPage(Operacion operacion)
@@ -46,9 +46,10 @@ namespace CalcudoraAplicacion
             //if (!string.IsNullOrEmpty(txtNumero1.Text) && !string.IsNullOrEmpty(txtNumero2.Text))
             //{
             #endregion
+            
             Operacion = (Operacion)OpcionOperacion.SelectedItem;
-                int Numero1 = Int32.Parse(txtNumero1.Text);
-                int Numero2 = Int32.Parse(txtNumero2.Text);
+            int Numero1 = Int32.Parse(txtNumero1.Text);
+            int Numero2 = Int32.Parse(txtNumero2.Text);
 
             switch (Operacion)
             {
@@ -116,6 +117,33 @@ namespace CalcudoraAplicacion
             //}
             #endregion
             lblResultado.Text = Resultado + "";
+        }
+
+        public bool ValidarEntrada(int nro1, int nro2)
+        {
+
+            //PARA EVITAR EL USO EXCESIVO DE CONDICIONES ANIDADAS, SE VA A INTENTAR USAR EL USO DE
+            //DE EXPRESIONES LAMDA Y PROGRAMACION FUNCIONAL PARA TRATAR DE ADAPTAR ESTAS VALIDACIONES
+            bool Validar = true;
+            var resultado = 0;
+
+
+            if (Validar.Equals(Operacion.Suma))
+            {
+                resultado = nro1 + nro2;
+                if (!string.IsNullOrEmpty(txtNumero1.Text) && !string.IsNullOrEmpty(txtNumero2.Text))
+                {
+
+                }
+            }
+
+            #region
+            //if (_operacion.Equals(Operacion.Suma))
+            //{
+
+            //}
+            #endregion
+            return Validar;
         }
     }
     public enum Operacion
