@@ -9,7 +9,7 @@ namespace CalcudoraAplicacion
 
         int ResultadoResto;
 
-        private readonly Operacion _operacion;
+        //private readonly Operacion _operacion;
 
         #region
         //public MainPage(Operacion operacion)
@@ -18,9 +18,9 @@ namespace CalcudoraAplicacion
         //}
         #endregion
 
-        public MainPage(Operacion operacion)
+        public MainPage()//(Operacion operacion)
         {
-            this._operacion = operacion;
+           // this._operacion = operacion;
             InitializeComponent();
             OpcionOperacion.Items.Add(Operacion.Suma.ToString());
             OpcionOperacion.Items.Add(Operacion.Resta.ToString());
@@ -37,80 +37,84 @@ namespace CalcudoraAplicacion
         }
 
         private void OpcionOperacion_SelectedIndexChanged(object sender, EventArgs e) { }
-        
+
         private void Calcular_Clicked(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtNumero1.Text) && !string.IsNullOrEmpty(txtNumero2.Text))
-            {
-                String op = OpcionOperacion.SelectedItem.ToString();
+            Operacion Operacion;
+
+            #region
+            //if (!string.IsNullOrEmpty(txtNumero1.Text) && !string.IsNullOrEmpty(txtNumero2.Text))
+            //{
+            #endregion
+            Operacion = (Operacion)OpcionOperacion.SelectedItem;
                 int Numero1 = Int32.Parse(txtNumero1.Text);
                 int Numero2 = Int32.Parse(txtNumero2.Text);
 
-                switch (_operacion)
-                {
-                    case Operacion.Suma:
-                        Resultado = Numero1 + Numero2;
-                        break;
-                    case Operacion.Resta:
-                        Resultado = Numero1 - Numero2;
-                        break;
-                    case Operacion.Multiplicacion:
-                        Resultado = Numero1 * Numero2;
-                        break;
-                    case Operacion.Division:
-                        Resultado = Numero1 / Numero2;
-                        break;
-                    case Operacion.Potenciacion:
-                        Resultado = Math.Pow(Numero1, Numero2);
-                        break;
-                    case Operacion.Radicacion:
-                        Resultado = Math.Sqrt(Numero1);
-                        break;
-                    case Operacion.ValorAbsoluto:
-                        Resultado = Math.Abs(Numero1);
-                        break;
-                    case Operacion.Resto:
-                        Resultado = Math.DivRem(Numero1, Numero2, out ResultadoResto);
-                        break;
-                    case Operacion.Exponenciacion:
-                        Resultado = Math.Exp(Numero1);
-                        break;
-                    case Operacion.MaximoValor:
-                        Resultado = Math.Max(Numero1, Numero2);
-                        break;
-                    default:
-                        Console.WriteLine("No es posible realizar calculos multiples");
-                        break;
-                }
-
-                #region
-                //if (op == "suma")
-                //{
-                //    Resultado = Numero1 + Numero2;
-                //}
-                //else if (op == "resta")
-                //{
-                //    Resultado = Numero1 - Numero2;
-                //}
-                //else if (op == "multiplicacion")
-                //{
-                //    Resultado = Numero1 * Numero2;
-                //}
-                //else if (op == "division")
-                //{
-                //    Resultado = Numero1 / Numero2;
-                //}
-                //else
-                //{
-                //    Console.WriteLine("no se pueden hacer calculos multiples");
-                //}
-                #endregion
-
+            switch (Operacion)
+            {
+                case Operacion.Suma:
+                    Resultado = Numero1 + Numero2;
+                    break;
+                case Operacion.Resta:
+                    Resultado = Numero1 - Numero2;
+                    break;
+                case Operacion.Multiplicacion:
+                    Resultado = Numero1 * Numero2;
+                    break;
+                case Operacion.Division:
+                    Resultado = Numero1 / Numero2;
+                    break;
+                case Operacion.Potenciacion:
+                    Resultado = Math.Pow(Numero1, Numero2);
+                    break;
+                case Operacion.Radicacion:
+                    Resultado = Math.Sqrt(Numero1);
+                    break;
+                case Operacion.ValorAbsoluto:
+                    Resultado = Math.Abs(Numero1);
+                    break;
+                case Operacion.Resto:
+                    Resultado = Math.DivRem(Numero1, Numero2, out ResultadoResto);
+                    break;
+                case Operacion.Exponenciacion:
+                    Resultado = Math.Exp(Numero1);
+                    break;
+                case Operacion.MaximoValor:
+                    Resultado = Math.Max(Numero1, Numero2);
+                    break;
+                default:
+                    Console.WriteLine("No es posible realizar calculos multiples");
+                    break;       
             }
+            #region
+            //if (op == "suma")
+            //{
+            //    Resultado = Numero1 + Numero2;
+            //}
+            //else if (op == "resta")
+            //{
+            //    Resultado = Numero1 - Numero2;
+            //}
+            //else if (op == "multiplicacion")
+            //{
+            //    Resultado = Numero1 * Numero2;
+            //}
+            //else if (op == "division")
+            //{
+            //    Resultado = Numero1 / Numero2;
+            //}
+            //else
+            //{
+            //    Console.WriteLine("no se pueden hacer calculos multiples");
+            //}
+            #endregion
+            #region
+            //}
             //else
             //{
             //    DisplayAlert("Datos erroneos", "Llene los espacios", "Ok");
             //}
+            #endregion
             lblResultado.Text = Resultado + "";
         }
     }

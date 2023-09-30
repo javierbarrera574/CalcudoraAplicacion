@@ -7,12 +7,12 @@ namespace CalcudoraAplicacion
 {
     public partial class App : Application
     {
-        protected Operacion operacion;
+        //protected Operacion operacion;
         public App()
         {
             InitializeComponent();
 
-            MainPage = new MainPage(operacion);
+            MainPage = new MainPage();//(operacion);
         }
         protected override void OnStart() { }
         protected override void OnSleep() { }
