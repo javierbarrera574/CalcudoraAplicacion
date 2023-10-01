@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace CalcudoraAplicacion
@@ -8,19 +10,8 @@ namespace CalcudoraAplicacion
         double Resultado = 0;
 
         int ResultadoResto;
-
-        private readonly Operacion _operacion;
-
-        #region
-        //public MainPage(Operacion operacion)
-        //{
-        //    this._operacion = operacion;
-        //}
-        #endregion
-
-        public MainPage()//(Operacion operacion)
+        public MainPage()
         {
-           // this._operacion = operacion;
             InitializeComponent();
             OpcionOperacion.Items.Add(Operacion.Suma.ToString());
             OpcionOperacion.Items.Add(Operacion.Resta.ToString());
@@ -41,31 +32,39 @@ namespace CalcudoraAplicacion
         private void Calcular_Clicked(object sender, EventArgs e)
         {
             Operacion Operacion;
-
-            #region
-            //if (!string.IsNullOrEmpty(txtNumero1.Text) && !string.IsNullOrEmpty(txtNumero2.Text))
-            //{
-            #endregion
             
             Operacion = (Operacion)OpcionOperacion.SelectedItem;
             int Numero1 = Int32.Parse(txtNumero1.Text);
             int Numero2 = Int32.Parse(txtNumero2.Text);
-
             switch (Operacion)
             {
                 case Operacion.Suma:
+                    Console.WriteLine(ValidarEntradas.Operaciones);
                     Resultado = Numero1 + Numero2;
                     break;
                 case Operacion.Resta:
+                    Console.WriteLine(ValidarEntradas.Operaciones);
                     Resultado = Numero1 - Numero2;
                     break;
                 case Operacion.Multiplicacion:
+                    Console.WriteLine(ValidarEntradas.Operaciones);
                     Resultado = Numero1 * Numero2;
                     break;
                 case Operacion.Division:
-                    Resultado = Numero1 / Numero2;
-                    break;
+                    Console.WriteLine(ValidarEntradas.Operaciones);
+                    try
+                    {
+                        Resultado = Numero1 / Numero2;
+                    }
+                    catch (DivideByZeroException)
+                    {
+                        if (Numero2.Equals(0))
+                        {                       
+                            lblResultado.Text = "No se puede dividir por cero";
+                        }
+                    }                    break;
                 case Operacion.Potenciacion:
+                    Console.WriteLine(ValidarEntradas.Operaciones);
                     Resultado = Math.Pow(Numero1, Numero2);
                     break;
                 case Operacion.Radicacion:
@@ -75,88 +74,143 @@ namespace CalcudoraAplicacion
                     Resultado = Math.Abs(Numero1);
                     break;
                 case Operacion.Resto:
+                    Console.WriteLine(ValidarEntradas.Operaciones);
                     Resultado = Math.DivRem(Numero1, Numero2, out ResultadoResto);
                     break;
                 case Operacion.Exponenciacion:
                     Resultado = Math.Exp(Numero1);
                     break;
                 case Operacion.MaximoValor:
+                    Console.WriteLine(ValidarEntradas.Operaciones);
                     Resultado = Math.Max(Numero1, Numero2);
                     break;
                 default:
                     Console.WriteLine("No es posible realizar calculos multiples");
                     break;       
             }
-            #region
-            //if (op == "suma")
-            //{
-            //    Resultado = Numero1 + Numero2;
-            //}
-            //else if (op == "resta")
-            //{
-            //    Resultado = Numero1 - Numero2;
-            //}
-            //else if (op == "multiplicacion")
-            //{
-            //    Resultado = Numero1 * Numero2;
-            //}
-            //else if (op == "division")
-            //{
-            //    Resultado = Numero1 / Numero2;
-            //}
-            //else
-            //{
-            //    Console.WriteLine("no se pueden hacer calculos multiples");
-            //}
-            #endregion
-            #region
-            //}
-            //else
-            //{
-            //    DisplayAlert("Datos erroneos", "Llene los espacios", "Ok");
-            //}
-            #endregion
             lblResultado.Text = Resultado + "";
         }
 
-        public bool ValidarEntrada(int nro1, int nro2)
+        public class ValidacionesGlobales<T> : Exception
         {
-
-            //PARA EVITAR EL USO EXCESIVO DE CONDICIONES ANIDADAS, SE VA A INTENTAR USAR EL USO DE
-            //DE EXPRESIONES LAMDA Y PROGRAMACION FUNCIONAL PARA TRATAR DE ADAPTAR ESTAS VALIDACIONES
-            bool Validar = true;
-            var resultado = 0;
-
-
-            if (Validar.Equals(Operacion.Suma))
-            {
-                resultado = nro1 + nro2;
-                if (!string.IsNullOrEmpty(txtNumero1.Text) && !string.IsNullOrEmpty(txtNumero2.Text))
-                {
-
-                }
-            }
+            public ValidacionesGlobales() : base("No se admiten campos vacios") { }
 
             #region
-            //if (_operacion.Equals(Operacion.Suma))
-            //{
+            //public static readonly Predicate<MainPage> petes =
+            //    (n) => !(string.IsNullOrEmpty(n.txtNumero1.Text) && string.IsNullOrEmpty(n.txtNumero2.Text));
 
-            //}
             #endregion
-            return Validar;
+
+            public static readonly Predicate<MainPage> CamposNoNulos = (n) =>
+            {
+                try
+                { 
+                    bool Validar = !(string.IsNullOrEmpty(n.txtNumero1.Text) || string.IsNullOrEmpty(n.txtNumero2.Text));
+                }
+
+                catch (Exception)
+                {
+                    throw new ValidacionesGlobales<T>();
+                }
+                return true;
+                #region
+                //if (string.IsNullOrEmpty(n.txtNumero1.Text) || string.IsNullOrEmpty(n.txtNumero2.Text))
+                //{
+                //    throw new ValidacionesGlobales<T>();
+                //}
+                //return true;
+                #endregion
+            };
+
+        }
+
+        public class ValidarEntradas
+        {
+            //Diccionario de predicados
+
+            public static readonly Dictionary<Operacion, (Func<double, double, double> funcion, Predicate<MainPage> validador)> Operaciones
+              = new Dictionary<Operacion, (Func<double, double, double>, Predicate<MainPage>)>
+              {
+                    {
+                        Operacion.Suma, ((a, b) => a + b, (Page) => ValidacionesGlobales<MainPage>.CamposNoNulos(Page))
+                    },
+                    {
+                        Operacion.Resta, ((a, b) => a - b, (Page) => ValidacionesGlobales<MainPage>.CamposNoNulos(Page))
+                    },
+                    {
+                        Operacion.Multiplicacion, ((a, b) => a * b, (Page) => ValidacionesGlobales<MainPage>.CamposNoNulos(Page))
+                    },
+                    {
+                        Operacion.Division, ((a, b) => a / b, (Page) => ValidacionesGlobales<MainPage>.CamposNoNulos(Page))
+                    },
+                    {
+                        Operacion.Potenciacion, ((a, b) => Math.Pow(a,b), (Page) => ValidacionesGlobales<MainPage>.CamposNoNulos(Page))
+                    },
+                    {
+                        Operacion.Resto, ((a, b) => RealizarDivisionConResto(a,b), (Page) => ValidacionesGlobales<MainPage>.CamposNoNulos(Page))
+                    },
+                    {
+                        Operacion.MaximoValor, ((a, b) => Math.Max(a,b), (Page) => ValidacionesGlobales<MainPage>.CamposNoNulos(Page))
+                    },
+
+              };
+
+            private static double RealizarDivisionConResto(double a, double b)
+            {
+                /*
+                 * Como no es posible representar la función Math.DivRem como una expresión lambda dentro de un diccionario 
+                 * de Func y Predicate directamente debido al uso de la palabra reservada out. En este caso, 
+                 * envuelvo la funcion Math.DivRem en una función separada que maneje la lógica de out
+                 * y utilizo esta función en el diccionario de Func.
+                 */
+
+                int Cociente;
+                int resultadoResto = Math.DivRem((int)a, (int)b, out Cociente);
+                return resultadoResto;
+            }    
+        }
+
+        public class ValidacionOperacion
+        {
+            //Params es una forma dinamica de crear elementos sin importar la longitud de este
+            public static bool Validar<T>(T operacion, params Predicate<T>[] Validaciones) =>
+                Validaciones.ToList().Where(d => 
+                {
+                    return !d(operacion);
+                }).Count()>=0;
+        }     
+    }
+
+    [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
+    public class NombreAttribute : Attribute
+    {
+        public string Nombre { get; set; }
+        public NombreAttribute(string nombre)
+        {
+            this.Nombre = nombre;
         }
     }
-    public enum Operacion
+    public enum Operacion 
     {
-        Suma=1,
+        [Nombre("Suma")]
+        Suma= 1,
+        [Nombre("Resta")]
         Resta=2,
+        [Nombre("Multiplicación")]
         Multiplicacion=3,
+        [Nombre("División")]
         Division=4,
+        [Nombre("Potenciación")]
         Potenciacion=5,
+        [Nombre("Radicación")]
         Radicacion=6,
+        [Nombre("Valor absoluto")]
         ValorAbsoluto=7,
+        [Nombre("Resto")]
         Resto=8,
+        [Nombre("Exponenciación")]
         Exponenciacion=9,
+        [Nombre("Maximo valor")]
         MaximoValor=10
     }
 }
