@@ -48,10 +48,13 @@ namespace CalcudoraAplicacion
                         break;
                     case Operacion.Potenciacion:
                         resultado = Math.Pow(numero1, numero2);
-                        if (Double.MaxValue.Equals(resultado))
+                        if (Double.IsInfinity(resultado))
                         {
-                            Label label = lblResultado;
-                            label.IsVisible = true;
+                            //Label label = new Label();
+                            //label.Text = lblResultado.Text;
+                            //label.IsVisible = false;
+                            lblResultado.Text = "El resultado esta fuera de los intervalos especificos";
+                            return;
                         }
                         else
                         {
