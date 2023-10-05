@@ -50,9 +50,6 @@ namespace CalcudoraAplicacion
                         resultado = Math.Pow(numero1, numero2);
                         if (Double.IsInfinity(resultado))
                         {
-                            //Label label = new Label();
-                            //label.Text = lblResultado.Text;
-                            //label.IsVisible = false;
                             lblResultado.Text = "El resultado esta fuera de los intervalos especificos";
                             return;
                         }
